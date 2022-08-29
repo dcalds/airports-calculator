@@ -16,6 +16,11 @@ export interface ICoordinate {
   longitude: number;
 }
 
+export interface IGoogleCoordinate {
+  lat: number;
+  lng: number;
+}
+
 export interface IMap {
   finalCoorinates: any;
   iataCodes: any;

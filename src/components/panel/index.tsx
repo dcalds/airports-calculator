@@ -34,32 +34,7 @@ export const Panel: React.FC<IPanel> = ({
     <S.Panel position="static" >
       <S.Center>
 
-        {/* NAME */}
-        <Grid
-          container
-          direction="row"
-          justifyContent="start"
-          alignItems="center"
-          sx={{ width: 250, display: { lg: 'none', xs: 'flex' } }}
-        >
-          {
-            finalDistance ?
-              <>
-                <PinDrop />
-                <Typography variant="body1" textAlign="center" sx={{ mx: 1 }}>
-                  {finalDistance} Nautical Miles
-                </Typography>
-              </> :
-              <>
-                <Flight />
-                <Typography variant="h6" m={1}>
-                  Air Calculator
-                </Typography>
-              </>
-          }
-        </Grid>
-
-        {/* WEB SELECTOR */}
+        {/* WEB PANEL */}
         <Grid
           sx={{ width: '100%', display: { lg: 'flex', xs: 'none' } }}
           container
@@ -114,6 +89,31 @@ export const Panel: React.FC<IPanel> = ({
           >
             Calculate
           </LoadingButton>
+        </Grid>
+
+        {/* MOBILE INFO */}
+        <Grid
+          container
+          direction="row"
+          justifyContent="start"
+          alignItems="center"
+          sx={{ width: 250, display: { lg: 'none', xs: 'flex' } }}
+        >
+          {
+            finalDistance ?
+              <>
+                <PinDrop />
+                <Typography variant="body1" textAlign="center" sx={{ mx: 1 }}>
+                  {finalDistance} Nautical Miles
+                </Typography>
+              </> :
+              <>
+                <Flight />
+                <Typography variant="h6" m={1}>
+                  Air Calculator
+                </Typography>
+              </>
+          }
         </Grid>
 
         {/* MOBILE BUTTON */}

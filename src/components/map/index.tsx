@@ -8,7 +8,7 @@ import { IMap } from "../../interfaces";
 import Pin from '../../assets/pin.png';
 import './styles.css';
 
-const defaultCoodinate = { lat: 39.156610, lng: -97.380671 }
+const DEFAULT_COORDINATE = { lat: 39.156610, lng: -97.380671 }
 
 export const Map: React.FC<IMap> = ({ finalCoorinates, iataCodes }) => {
   const { isLoaded } = useJsApiLoader({
@@ -19,7 +19,7 @@ export const Map: React.FC<IMap> = ({ finalCoorinates, iataCodes }) => {
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={{ width: "100%", height: "90%" }}
-      center={finalCoorinates ? finalCoorinates[0] : defaultCoodinate}
+      center={finalCoorinates ? finalCoorinates[0] : DEFAULT_COORDINATE}
       zoom={5}
       options={{
         disableDefaultUI: true,
