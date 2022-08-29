@@ -18,6 +18,7 @@ export interface ICoordinate {
 
 export interface IMap {
   finalCoorinates: any;
+  iataCodes: any;
 }
 export interface IPanel {
   loading: boolean;

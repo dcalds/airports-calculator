@@ -14,15 +14,21 @@ export default function App() {
     null
   );
 
+  const [iataCodes, setIataCodes] = useState<any | null>(null);
   const [finalCoorinates, setFinalCoorinates] = useState<any | null>(null);
   const [finalDistance, setFinalDistance] = useState<string | null>(null);
 
   const calculateFinalDistance = async () => {
     setFinalCoorinates(null);
-    
+
     if (airportOrigin && airportDestination) {
       const originData = await retriveSingleAirport(airportOrigin);
       const destinationData = await retriveSingleAirport(airportDestination);
+
+      setIataCodes([
+        originData.iata,
+        destinationData.iata,
+      ])
 
       setFinalCoorinates([
         {
@@ -51,6 +57,7 @@ export default function App() {
   return (
     <S.MainContainer maxWidth={false}>
       <Map
+        iataCodes={iataCodes}
         finalCoorinates={finalCoorinates}
       />
       <Panel

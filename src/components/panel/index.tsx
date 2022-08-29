@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { Typography, Autocomplete, TextField, Box, Alert, Toolbar, IconButton, Button, Grid, Modal, Collapse } from "@mui/material";
+import { Typography, Autocomplete, TextField, Box, Button, Grid, Modal } from "@mui/material";
+import { Flight, PinDrop } from '@mui/icons-material';
 import { LoadingButton } from "@mui/lab";
 import { IPanel } from "../../interfaces";
-import { Flight, PinDrop, Close } from '@mui/icons-material';
 import * as S from "./styles";
 
 export const Panel: React.FC<IPanel> = ({
   loading,
   airports,
-  error,
   setAirportOrigin,
   setAirportDestination,
   setFinalDistance,
@@ -19,33 +18,21 @@ export const Panel: React.FC<IPanel> = ({
   const [open, setOpen] = useState(false);
   const callModal = () => setOpen(!open);
 
+  const calculateDistanceOnMobile = async () => {
+    try {
+      await calculateFinalDistance();
+    }
+    catch (e) {
+      console.log(e);
+    }
+    finally {
+      callModal();
+    }
+  }
+
   return (
     <S.Panel position="static" >
       <S.Center>
-
-        {/* {
-          !loading && (
-            <Box sx={alertStyle}>
-              <Alert
-                action={
-                  <IconButton
-                    aria-label="close"
-                    color="inherit"
-                    size="small"
-                    onClick={() => {
-                      setOpen(false);
-                    }}
-                  >
-                    <Close fontSize="inherit" />
-                  </IconButton>
-                }
-                sx={{ mb: 2 }}
-              >
-                Close me!
-              </Alert>
-            </Box>
-          )
-        } */}
 
         {/* NAME */}
         <Grid
@@ -53,43 +40,54 @@ export const Panel: React.FC<IPanel> = ({
           direction="row"
           justifyContent="start"
           alignItems="center"
-          sx={{ width: '30%' }}
+          sx={{ width: 250, display: { lg: 'none', xs: 'flex' } }}
         >
-          <Flight />
-          <Typography variant="h6" m={1}
-            sx={{ width: '70%', display: { lg: 'flex', xs: 'none' } }}>
-            Air Calculator
-          </Typography>
+          {
+            finalDistance ?
+              <>
+                <PinDrop />
+                <Typography variant="body1" textAlign="center" sx={{ mx: 1 }}>
+                  {finalDistance} Nautical Miles
+                </Typography>
+              </> :
+              <>
+                <Flight />
+                <Typography variant="h6" m={1}>
+                  Air Calculator
+                </Typography>
+              </>
+          }
         </Grid>
 
         {/* WEB SELECTOR */}
         <Grid
-          sx={{ width: '70%', display: { lg: 'flex', xs: 'none' } }}
+          sx={{ width: '100%', display: { lg: 'flex', xs: 'none' } }}
           container
           direction="row"
-          justifyContent="end"
+          justifyContent="center"
           alignItems="center"
         >
-          {finalDistance && (
-            <>
-              <PinDrop sx={{ ml: 4 }} />
-              <Typography variant="body1" textAlign="center" sx={{ mx: 1 }}>
-                {finalDistance} Nautical Miles
-              </Typography>
-            </>
-          )}
-          {error !== null && (
-            <Typography sx={{ pb: 3 }} variant="body1" textAlign="start">
-              Unable to calculate distance
-            </Typography>
-          )}
+          {
+            finalDistance ?
+              <>
+                <PinDrop />
+                <Typography variant="body1" textAlign="center" sx={{ mx: 1 }}>
+                  {finalDistance} Nautical Miles
+                </Typography>
+              </> :
+              <>
+                <Flight />
+                <Typography variant="h6" m={1}>
+                  Air Calculator
+                </Typography>
+              </>
+          }
           <Autocomplete
             sx={{ width: 200, ml: 4 }}
             disablePortal
             onChange={(event, value) => {
               setAirportOrigin(value), setFinalDistance(null);
             }}
-            id="combo-box-demo"
             options={airports}
             renderInput={(params) => (
               <TextField {...params} label="Airport Origin" />
@@ -101,7 +99,6 @@ export const Panel: React.FC<IPanel> = ({
             onChange={(event, value) => {
               setAirportDestination(value), setFinalDistance(null);
             }}
-            id="combo-box-demo"
             options={airports}
             renderInput={(params) => (
               <TextField {...params} label="Airport Destination" />
@@ -121,7 +118,7 @@ export const Panel: React.FC<IPanel> = ({
 
         {/* MOBILE BUTTON */}
         <Grid
-          sx={{ display: { lg: 'none', xs: 'flex' } }}
+          sx={{ width: '30%', display: { lg: 'none', xs: 'flex' } }}
           container
           direction="row"
           justifyContent="end"
@@ -142,9 +139,9 @@ export const Panel: React.FC<IPanel> = ({
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
+          <S.ModalBody>
             <Typography variant="body1" textAlign="center" sx={{ mb: 2 }}>
-              Select Origin and Destionation Airports
+              Select an Origin and Destination
             </Typography>
             <Autocomplete
               sx={{ width: 200, mb: 2 }}
@@ -152,7 +149,6 @@ export const Panel: React.FC<IPanel> = ({
               onChange={(event, value) => {
                 setAirportOrigin(value), setFinalDistance(null);
               }}
-              id="combo-box-demo"
               options={airports}
               renderInput={(params) => (
                 <TextField {...params} label="Airport Origin" />
@@ -164,14 +160,13 @@ export const Panel: React.FC<IPanel> = ({
               onChange={(event, value) => {
                 setAirportDestination(value), setFinalDistance(null);
               }}
-              id="combo-box-demo"
               options={airports}
               renderInput={(params) => (
                 <TextField {...params} label="Airport Destination" />
               )}
             />
             <LoadingButton
-              onClick={() => { calculateFinalDistance(), callModal() }}
+              onClick={calculateDistanceOnMobile}
               loading={loading}
               loadingIndicator="Loading…"
               variant="contained"
@@ -179,34 +174,10 @@ export const Panel: React.FC<IPanel> = ({
             >
               Calculate
             </LoadingButton>
-          </Box>
+          </S.ModalBody>
         </Modal>
 
       </S.Center>
     </S.Panel>
   );
 };
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  p: 4,
-};
-
-const alertStyle = {
-  position: 'absolute' as 'absolute',
-  width: '100%',
-  top: '-80px',
-  left: '0',
-  padding: '0 25px'
-}
