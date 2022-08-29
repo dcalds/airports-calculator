@@ -17,7 +17,7 @@ export interface ICoordinate {
 }
 
 export interface IMap {
-  directionsResponse: any;
+  finalCoorinates: any;
 }
 export interface IPanel {
   loading: boolean;

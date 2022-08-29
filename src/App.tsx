@@ -13,31 +13,27 @@ export default function App() {
   const [airportDestination, setAirportDestination] = useState<IAirport | null>(
     null
   );
-  const [directionsResponse, setDirectionsResponse] = useState<any | null>(
-    null
-  );
+
+  const [finalCoorinates, setFinalCoorinates] = useState<any | null>(null);
   const [finalDistance, setFinalDistance] = useState<string | null>(null);
 
   const calculateFinalDistance = async () => {
+    setFinalCoorinates(null);
+    
     if (airportOrigin && airportDestination) {
       const originData = await retriveSingleAirport(airportOrigin);
       const destinationData = await retriveSingleAirport(airportDestination);
 
-      const directionsService = new google.maps.DirectionsService();
-
-      const results = await directionsService.route({
-        origin: {
+      setFinalCoorinates([
+        {
           lat: parseFloat(originData.latitude),
           lng: parseFloat(originData.longitude),
         },
-        destination: {
+        {
           lat: parseFloat(destinationData.latitude),
           lng: parseFloat(destinationData.longitude),
         },
-        travelMode: google.maps.TravelMode.DRIVING,
-      });
-
-      setDirectionsResponse(results);
+      ])
 
       const finalDistance = calculateDistanceBetweenCoordinates(
         originData,
@@ -54,7 +50,9 @@ export default function App() {
 
   return (
     <S.MainContainer maxWidth={false}>
-      <Map directionsResponse={directionsResponse} />
+      <Map
+        finalCoorinates={finalCoorinates}
+      />
       <Panel
         loading={loading}
         airports={airports}
