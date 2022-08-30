@@ -1,17 +1,17 @@
-import { ICoordinate } from "../interfaces";
+import { IGoogleCoordinate } from "../interfaces";
 
 export function calculateDistanceBetweenCoordinates(
-  origin: ICoordinate,
-  destination: ICoordinate
+  origin: IGoogleCoordinate,
+  destination: IGoogleCoordinate
 ) {
   const R = 6371;
-  const diferenceLatitudeToRad = toRadian(destination.latitude - origin.latitude);
-  const diferenceLongitudeToRad = toRadian(destination.longitude - origin.longitude);
+  const diferenceLatitudeToRad = toRadian(destination.lat - origin.lat);
+  const diferenceLongitudeToRad = toRadian(destination.lng - origin.lng);
 
   const a =
     Math.sin(diferenceLatitudeToRad / 2) * Math.sin(diferenceLatitudeToRad / 2) +
-    Math.cos(toRadian(origin.latitude)) *
-      Math.cos(toRadian(destination.latitude)) *
+    Math.cos(toRadian(origin.lat)) *
+      Math.cos(toRadian(destination.lat)) *
       Math.sin(diferenceLongitudeToRad / 2) *
       Math.sin(diferenceLongitudeToRad / 2);
 

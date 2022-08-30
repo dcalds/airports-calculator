@@ -1,7 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
 export interface IAirport {
   name: string;
-  iata: string;
+  iata_code: string;
+  lat: number;
+  lng: number;
 }
 export interface IData {
   airports: Array<IAirport>;
@@ -9,11 +11,6 @@ export interface IData {
 
 export interface ILocation {
   origin: string;
-}
-
-export interface ICoordinate {
-  latitude: number;
-  longitude: number;
 }
 
 export interface IGoogleCoordinate {

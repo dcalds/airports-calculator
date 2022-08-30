@@ -6,7 +6,7 @@ import { IAirport, IGoogleCoordinate } from "./interfaces";
 import * as S from "./styles";
 
 export default function App() {
-  const { loading, airports, error, retriveAllAirports, retriveSingleAirport } =
+  const { loading, airports, error, retriveAllAirportsV2 } =
     useAirport();
   const [airportOrigin, setAirportOrigin] = useState<IAirport | null>(null);
   const [airportDestination, setAirportDestination] = useState<IAirport | null>(
@@ -20,28 +20,26 @@ export default function App() {
     setFinalCoorinates(null);
 
     if (airportOrigin && airportDestination) {
-      const originData = await retriveSingleAirport(airportOrigin);
-      const destinationData = await retriveSingleAirport(airportDestination);
 
       setIataCodes([
-        originData.iata,
-        destinationData.iata,
+        airportOrigin.iata_code,
+        airportDestination.iata_code,
       ])
 
       setFinalCoorinates([
         {
-          lat: parseFloat(originData.latitude),
-          lng: parseFloat(originData.longitude),
+          lat: airportOrigin.lat,
+          lng: airportOrigin.lng,
         },
         {
-          lat: parseFloat(destinationData.latitude),
-          lng: parseFloat(destinationData.longitude),
+          lat: airportDestination.lat,
+          lng: airportDestination.lng,
         },
       ])
 
       const finalDistance = calculateDistanceBetweenCoordinates(
-        originData,
-        destinationData
+        airportOrigin,
+        airportDestination
       );
 
       setFinalDistance(finalDistance);
@@ -49,7 +47,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    retriveAllAirports();
+    retriveAllAirportsV2();
   }, []);
 
   return (

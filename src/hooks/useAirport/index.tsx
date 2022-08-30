@@ -1,76 +1,42 @@
 import { useState } from "react";
 import { IAirport } from "../../interfaces";
+import api from "../../services/api";
 
 export function useAirport() {
   const [loading, setLoading] = useState<boolean>(false);
   const [airports, setAirports] = useState<Array<IAirport>>([]);
   const [error, setError] = useState<unknown>(null);
 
-  const retriveAllAirports = async () => {
+  const retriveAllAirportsV2 = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const promise = await fetch(
-        `https://www.air-port-codes.com/api/v1/autocomplete?type=a&limit=20&term=United States`,
-        {
-          method: "GET",
-          headers: {
-            "APC-Auth": process.env.REACT_APP_AUTH as string,
-          },
-          mode: "cors",
-          cache: "default",
-        }
-      );
+      const { data } = await api.get(`/airports?api_key=${process.env.REACT_APP_API_KEY}&country_code=${process.env.REACT_APP_COUNTRY_CODE}`)
 
-      const response = await promise.json();
-
-      const formatList = response.airports.map((element: any) => {
+      const formatList = data.response.map((element: any) => {
         return {
-          label: element.name + " " + element.iata,
-          iata: element.iata,
+          label: element.name + " " + element.iata_code,
+          iata_code: element.iata_code,
+          lat: element.lat,
+          lng: element.lng,
         };
       });
 
       setAirports(formatList);
     } catch (e) {
-      setError(e);
+      console.log(e);
     } finally {
       setLoading(false);
     }
-  };
 
-  const retriveSingleAirport = async (origin: IAirport) => {
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const promise = await fetch(
-        `https://www.air-port-codes.com/api/v1/single?iata=${origin.iata}`,
-        {
-          method: "GET",
-          headers: {
-            "APC-Auth": "f0c102907c",
-          },
-          mode: "cors",
-          cache: "default",
-        }
-      );
-      const response = await promise.json();
-      return response.airport;
-    } catch (e) {
-      setError(e);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }
 
   const values = {
     loading,
     airports,
     error,
-    retriveAllAirports,
-    retriveSingleAirport,
+    retriveAllAirportsV2,
   };
 
   return values;
