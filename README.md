@@ -1,24 +1,25 @@
-# Airpot Calculator
+# ✈️ Airpot Calculator
 
 > This app calculate distance in straight line between two USA Airports.
 
-## Techs used
+## 🖥️ Techs used
 
 - Yarn
 - React + Typescript
+- Axios
 - Material UI + Styled Components
 - React Google Maps
 
-## Folder Organization
+## 📁 Folder Organization
 
-- src/components - components shared between all project
-- src/utils - functions shared between components
-- src/hooks - custom hooks for this project
-- src/interface - interfaces used for typing components and variables
+- **src/assets** - visual assets used on screens
+- **src/components** - components shared between all project
+- **src/hooks** - custom hooks for this project
+- **src/interfaces** - interfaces used for typing functions and variables
+- **src/services** - API connection configuration
+- **src/utils** - functions shared between components
 
-## How to Run
-
-> Important: To Run this app, ensure you have an Auth Api Key and Google Api Key, both declared on .env file of the project.
+## 🏁 How to Run
 
 Install all depedencies using:
 
@@ -31,4 +32,12 @@ After, just start the project using:
 ```
   yarn start
 ```
-> This project uses free api from [AIR-PORT-CODES](https://www.air-port-codes.com/). Is limited to 20 results per search, in free version. 
+
+> Important: To Run this app, ensure you have an Auth Api Key, Google Api Key, Base Url and Country Code declared on .env file of the project:
+
+```
+  REACT_APP_GOOGLE_MAPS
+  REACT_APP_BASE_URL
+  REACT_APP_API_KEY
+  REACT_APP_COUNTRY_CODE
+```
